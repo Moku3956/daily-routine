@@ -9,7 +9,7 @@ erDiagram
     USERS {
         INT user_id PK "オートインクリメント"
         VARCHAR user_name UK "ユニーク制約"
-        VARCHAR password "ハッシュ化"
+        VARCHAR password ""
     }
 
     HABITS {
