@@ -26,20 +26,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRegisterRequest'
+              $ref: '#/components/schemas/user_register_request'
       responses:
         '201':
           description: "ユーザー登録成功"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/user_register_response'
         '400':
           description: "リクエストデータに問題あり"
           content:
             application/json:
               schema:
-                $ref: '#/components/responses/ErrorResponse'
+                $ref: '#/components/responses/'
 
   /session:
     post:
@@ -163,33 +163,33 @@ paths:
 
   components:
     schemas:
+      # --- ユーザー関連 ---
       user_register_request:
         type: object
         required:
-          - username
+          - user_name
           - password
         properties:
-          username:
+          user_name:
             type: string
             description: "登録するユーザー名（ユニーク）"
-            example: "moku_user"
+            example: "Yamada_3956"
           password:
             type: string
             format: password
             description: "パスワード(8文字以上推奨)"
-            example: "secure_pass123"
+            example: "Moku_0911"
 
-
-      user_response:
+      user_register_response:
         type: object
         properties:
           user_id:
             type: integer
-            description: "システムで割り振られたID"
+            description: "自動インクリメントID"
             example: 1
           username:
             type: string
-            example: "moku_user"
+            example: "Moku_0911"
 
       user_login_request:
         type: object
@@ -215,7 +215,7 @@ paths:
             description: "セッション取得"
             example: 1
 
-
+      # --- コンディション関連 ---
       condition_request:
         type: object
         required: 
