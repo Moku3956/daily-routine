@@ -20,7 +20,7 @@ paths:
       summary: "ユーザー登録"
       description: "新しいユーザーを作成し、認証情報を保存します。"
       tags:
-        - "Auth"
+        - Auth
       requestBody:
         required: true
         content:
@@ -44,6 +44,8 @@ paths:
   /session:
     post:
       summary: セッション発行
+      tags:
+        - Auth
       requestBody:
         required: true
         content:
@@ -64,6 +66,8 @@ paths:
 
     delete:
       summary: "セッション削除（ログアウト）"
+      tags:
+        - Auth
       responses:
         '204':
           description: "セッション削除成功（返却データなし）"
@@ -75,6 +79,8 @@ paths:
   /api/condition:
     post:
       summary: コンディション入力
+      tags:
+        - Condition
       requestBody:
         required: true
         content:
@@ -89,6 +95,8 @@ paths:
 
     get:
       summary: 本日のコンディション取得
+      tags:
+        - Condition
       responses:
         '200':
           description: 本日のコンディション情報
@@ -108,33 +116,49 @@ paths:
   /api/habits:
     post:
       summary: 習慣追加
+      tags:
+        - Habit
     get:
       summary: 習慣一覧取得
+      tags:
+        - Habit
   /api/habits/{id}:
     patch:
       summary: 習慣編集
+      tags:
+        - Habit
     delete:
       summary: 習慣削除
+      tags:
+        - Habit
 
 
   # 習慣調整・順序決定
   /api/habits/ordered:
     get:
       summary: コンディションに応じた習慣順リスト取得
+      tags:
+        - Habit
 
 
   # 習慣チェック・振り返り
   /api/habits/logs:
     post:
       summary: 習慣の完了チェック
+      tags:
+        - Log
     get:
       summary: 習慣チェック履歴取得
+      tags:
+        - Log
 
 
   # 統計機能
   /api/stats/chain:
     get:
       summary: 連続達成日数取得
+      tags:
+        - Stats
 
 
   components:
