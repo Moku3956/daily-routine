@@ -2,6 +2,17 @@ openapi: "3.0.2"
 info:
   title: 習慣API
   version: "1.0.0"
+tags:
+  - name: Auth
+    description: 認証・ユーザー管理
+  - name: Condition
+    description: コンディション管理
+  - name: Habit
+    description: 習慣管理
+  - name: Log
+    description: 習慣チェック・履歴
+  - name: Stats
+    description: 統計機能
 paths:
   # ユーザー認証
   /register:
@@ -59,6 +70,7 @@ paths:
         '401':
           description: "認証されていないため、削除できません"
 
+
   # コンディション管理
   /api/condition:
     post:
@@ -74,7 +86,6 @@ paths:
           description: "入力完了"
         '401':
           description: "無効な入力"
-
 
     get:
       summary: 本日のコンディション取得
@@ -92,6 +103,7 @@ paths:
               schema:
                 $ref: '#/components/responses/error_response'
 
+
   # 習慣管理
   /api/habits:
     post:
@@ -104,10 +116,12 @@ paths:
     delete:
       summary: 習慣削除
 
+
   # 習慣調整・順序決定
   /api/habits/ordered:
     get:
       summary: コンディションに応じた習慣順リスト取得
+
 
   # 習慣チェック・振り返り
   /api/habits/logs:
@@ -115,6 +129,7 @@ paths:
       summary: 習慣の完了チェック
     get:
       summary: 習慣チェック履歴取得
+
 
   # 統計機能
   /api/stats/chain:
