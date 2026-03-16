@@ -1,1 +1,196 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
+info:
+  title: 習慣API
+  version: "1.0.0"
+paths:
+  # ユーザー認証
+  /register:
+    post:
+      summary: "ユーザー登録"
+      description: "新しいユーザーを作成し、認証情報を保存します。"
+      tags:
+        - "Auth"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegisterRequest'
+      responses:
+        '201':
+          description: "ユーザー登録成功"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: "リクエストデータに問題あり"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/ErrorResponse'
+
+  /session:
+    post:
+      summary: セッション発行
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/user_login_request'
+      responses:
+        '201':
+          description: "セッション付与成功"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_login_response'
+        '404': 
+        description: "見つからない"
+        '500': 
+        description: "サーバーエラー"
+
+    delete:
+      summary: "セッション削除（ログアウト）"
+      responses:
+        '204':
+          description: "セッション削除成功（返却データなし）"
+        '401':
+          description: "認証されていないため、削除できません"
+
+  # コンディション管理
+  /api/condition:
+    post:
+      summary: コンディション入力
+      requestBody:
+        required: true
+        content:
+          application/json:
+          scheme:
+            $ref: '#/components/schemas/condition_request'
+      response:
+        '204':
+          description: "入力完了"
+        '401':
+          description: "無効な入力"
+
+
+    get:
+      summary: 本日のコンディション取得
+
+
+  # 習慣管理
+  /api/habits:
+    post:
+      summary: 習慣追加
+    get:
+      summary: 習慣一覧取得
+  /api/habits/{id}:
+    patch:
+      summary: 習慣編集
+    delete:
+      summary: 習慣削除
+
+  # 習慣調整・順序決定
+  /api/habits/ordered:
+    get:
+      summary: コンディションに応じた習慣順リスト取得
+
+  # 習慣チェック・振り返り
+  /api/habits/logs:
+    post:
+      summary: 習慣の完了チェック
+    get:
+      summary: 習慣チェック履歴取得
+
+  # 統計機能
+  /api/stats/chain:
+    get:
+      summary: 連続達成日数取得
+
+
+  components:
+    schemas:
+      user_register_request:
+        type: object
+        required:
+          - username
+          - password
+        properties:
+          username:
+            type: string
+            description: "登録するユーザー名（ユニーク）"
+            example: "moku_user"
+          password:
+            type: string
+            format: password
+            description: "パスワード(8文字以上推奨)"
+            example: "secure_pass123"
+
+
+      user_response:
+        type: object
+        properties:
+          user_id:
+            type: integer
+            description: "システムで割り振られたID"
+            example: 1
+          username:
+            type: string
+            example: "moku_user"
+
+      user_login_request:
+        type: object
+        required:
+          - user_name
+          - password
+        properties:
+          user_name:
+            type: string
+            description: "登録したユーザー名"
+            example: "Yamada_3956"
+          password:
+            type: string
+            format: password
+            description: "登録したパスワード"
+            example: "Moku_0911"
+
+      user_login_response:
+        type: object
+        properties:
+          session_id:
+            type: integer
+            description: "セッション取得"
+            example: 1
+
+
+      condition_request:
+        type: object
+        required: 
+           - p_condition
+           - m_condition
+        properties:
+          p_condition:
+            type: integer
+            description: "肉体的コンディション"
+            example: 5
+          m_condition:
+            type: integer
+            description: "精神的コンディション"
+            example: 5
+
+        condition_response:
+          type: object
+          properties:
+
+    responses:
+      error_response:
+        type: object
+        properties:
+          title:
+            type: string
+            example: "Bad Request"
+          detail:
+            type: string
+            example: "そのユーザー名は既に使用されています。"
