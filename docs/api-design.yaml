@@ -78,7 +78,19 @@ paths:
 
     get:
       summary: 本日のコンディション取得
-
+      responses:
+        '200':
+          description: 本日のコンディション情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/condition_response'
+        '401':
+          description: 認証エラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error_response'
 
   # 習慣管理
   /api/habits:
@@ -180,9 +192,25 @@ paths:
             description: "精神的コンディション"
             example: 5
 
-        condition_response:
-          type: object
-          properties:
+      condition_response:
+        type: object
+        properties:
+          p_condition:
+            type: integer
+            enum: [1, 2, 3, 4, 5]
+            description: "肉体的コンディション(1〜5)"
+          m_condition:
+            type: integer
+            enum: [1, 2, 3, 4, 5]
+            description: "精神的コンディション(1〜5)"
+          rank:
+            type: string
+            enum: [good, normal, bad]
+            description: "ランク（好調/普通/不調）"
+          date:
+            type: string
+            format: date
+            description: "記録日"
 
     responses:
       error_response:
