@@ -161,26 +161,26 @@ paths:
         '500':
           $ref: '#/components/responses/internal_server_error_response'
     get:
-    summary: 習慣一覧取得
-    tags:
-      - Habit
-    responses:
-      '200':
-        description: 習慣一覧
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/all_habits_response'
-      '400':
-        $ref: '#/components/responses/bad_request_response'
-      '401':
-        $ref: '#/components/responses/unauthorized_response'
-      '404':
-        $ref: '#/components/responses/not_found_response'
-      '500':
-        $ref: '#/components/responses/internal_server_error_response'
+      summary: 習慣一覧取得
+      tags:
+        - Habit
+      responses:
+        '200':
+          description: 習慣一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/all_habits_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '404':
+          $ref: '#/components/responses/not_found_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
   /habits/{id}:
     patch:
       summary: 習慣編集
