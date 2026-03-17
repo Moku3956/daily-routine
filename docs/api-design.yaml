@@ -362,6 +362,14 @@ paths:
               type: string
               description: "カテゴリ"
               example: "健康"
+            target_value:
+              type: integer
+              description: "目標値"
+              example: 5
+            unit:
+              type: string
+              description: "単位"
+              example: "回"
             p_cost:
               type: integer
               description: "肉体的コスト(1-10)"
