@@ -303,7 +303,7 @@ paths:
 
 
   # 統計機能
-  /stats/:
+  /stats:
     get:
       summary: 連続達成日数取得
       tags:
