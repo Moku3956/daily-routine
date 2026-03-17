@@ -170,9 +170,7 @@ paths:
         content:
           application/json:
             schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/all_habits_response'
+              $ref: '#/components/schemas/all_habits_response'
       '400':
         $ref: '#/components/responses/bad_request_response'
       '401':
