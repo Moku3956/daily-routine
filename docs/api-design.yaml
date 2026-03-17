@@ -324,11 +324,11 @@ paths:
           $ref: '#/components/responses/internal_server_error_response'
 
 
-  components:
-    schemas:
-      # --- ユーザー関連 ---
-      user_register_request:
-        type: object
+components:
+  schemas:
+    # --- ユーザー関連 ---
+    user_register_request:
+      type: object
         required:
           - user_name
           - password
