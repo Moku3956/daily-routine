@@ -438,7 +438,7 @@ paths:
             type: integer
             description: "自動インクリメントID"
             example: 1
-          username:
+          user_name:
             type: string
             example: "Moku_0911"
 
