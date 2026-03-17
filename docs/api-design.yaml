@@ -332,6 +332,7 @@ paths:
         required:
           - user_name
           - password
+          - password_confirm
         properties:
           user_name:
             type: string
@@ -341,6 +342,11 @@ paths:
             type: string
             format: password
             description: "パスワード(8文字以上推奨)"
+            example: "Moku_0911"
+          password_confirm:
+            type: string
+            format: password
+            description: "確認用パスワード（password と同じ値）"
             example: "Moku_0911"
 
       # --- 習慣順リスト ---
