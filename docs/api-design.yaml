@@ -179,6 +179,26 @@ paths:
         $ref: '#/components/responses/not_found_response'
       '500':
         $ref: '#/components/responses/internal_server_error_response'
+      summary: 習慣一覧取得
+      tags:
+        - Habit
+      responses:
+        '200':
+          description: 習慣一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/all_habits_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '404':
+          $ref: '#/components/responses/not_found_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
   /habits/{id}:
     patch:
       summary: 習慣編集
@@ -322,14 +342,15 @@ paths:
           $ref: '#/components/responses/internal_server_error_response'
 
 
-  components:
-    schemas:
-      # --- ユーザー関連 ---
-      user_register_request:
-        type: object
+components:
+  schemas:
+    # --- ユーザー関連 ---
+    user_register_request:
+      type: object
         required:
           - user_name
           - password
+          - password_confirm
         properties:
           user_name:
             type: string
@@ -339,6 +360,11 @@ paths:
             type: string
             format: password
             description: "パスワード(8文字以上推奨)"
+            example: "Moku_0911"
+          password_confirm:
+            type: string
+            format: password
+            description: "確認用パスワード（password と同じ値）"
             example: "Moku_0911"
 
       # --- 習慣順リスト ---
@@ -396,13 +422,17 @@ paths:
         properties:
           habit_id:
             type: integer
-            description: "完了した習慣のID"
+            description: "習慣のID"
             example: 1
           date:
             type: string
             format: date
-            description: "完了日 (YYYY-MM-DD)"
+            description: "チェック日 (YYYY-MM-DD)"
             example: "2026-03-17"
+          is_completed:
+            type: boolean
+            description: "完了したかどうか"
+            example: true
 
       habit_log_history_response:
         type: array
@@ -426,7 +456,7 @@ paths:
             type: integer
             description: "自動インクリメントID"
             example: 1
-          username:
+          user_name:
             type: string
             example: "Moku_0911"
 
@@ -598,6 +628,29 @@ paths:
           must:
             type: boolean
             example: true
+
+      error_response:
+        type: object
+        properties:
+          status:
+            type: integer
+            description: "HTTPステータスコード"
+            example: 400
+          error:
+            type: string
+            description: "エラー種別"
+            example: "Bad Request"
+          message:
+            type: string
+            description: "エラーメッセージ"
+            example: "リクエストが不正です。"
+          details:
+            type: array
+            description: "追加のエラー情報"
+            items:
+              type: string
+            example:
+              - "email は必須です"
 
     responses:
       bad_request_response:

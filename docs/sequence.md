@@ -10,7 +10,7 @@ sequenceDiagram
     participant Engine as 調整ロジック
 
     %% ユーザー登録
-    Browser->>Middleware: 新規登録リクエスト（ユーザー名・パスワード）
+    Browser->>Middleware: 新規登録リクエスト（ユーザー名・パスワード・確認用パスワード）
     Middleware->>Server: 新規登録データ送信
     Server->>DB: ユーザー名重複チェック
     DB-->>Server: チェック結果
