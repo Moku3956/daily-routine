@@ -14,7 +14,7 @@ erDiagram
 
     HABITS {
         INT habits_id PK "オートインクリメント"
-        INT user_id FK "Users.user_id"
+        INT user_id FK "USERS.user_id"
         VARCHAR habits_name
         VARCHAR category
         INT target_value
@@ -26,7 +26,7 @@ erDiagram
 
     CONDITIONS {
         INT condition_id PK "オートインクリメント"
-        INT user_id FK "Users.user_id"
+        INT user_id FK "USERS.user_id"
         INT p_condition "1-5"
         INT m_condition "1-5"
         DATE date
@@ -34,7 +34,7 @@ erDiagram
 
     LOGS {
         INT logs_id PK "オートインクリメント"
-        INT habits_id FK "Habits.habits_id"
+        INT habits_id FK "HABITS.habits_id"
         BOOLEAN is_completed
         DATE date
     }
