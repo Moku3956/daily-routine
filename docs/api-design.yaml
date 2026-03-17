@@ -611,6 +611,29 @@ components:
             type: boolean
             example: true
 
+      error_response:
+        type: object
+        properties:
+          status:
+            type: integer
+            description: "HTTPステータスコード"
+            example: 400
+          error:
+            type: string
+            description: "エラー種別"
+            example: "Bad Request"
+          message:
+            type: string
+            description: "エラーメッセージ"
+            example: "リクエストが不正です。"
+          details:
+            type: array
+            description: "追加のエラー情報"
+            items:
+              type: string
+            example:
+              - "email は必須です"
+
     responses:
       bad_request_response:
         description: "リクエストデータに問題あり(400)"
