@@ -398,13 +398,17 @@ paths:
         properties:
           habit_id:
             type: integer
-            description: "完了した習慣のID"
+            description: "習慣のID"
             example: 1
           date:
             type: string
             format: date
-            description: "完了日 (YYYY-MM-DD)"
+            description: "チェック日 (YYYY-MM-DD)"
             example: "2026-03-17"
+          is_completed:
+            type: boolean
+            description: "完了したかどうか"
+            example: true
 
       habit_log_history_response:
         type: array
