@@ -1,0 +1,677 @@
+openapi: "3.0.2"
+info:
+  title: 習慣API
+  version: "1.0.0"
+tags:
+  - name: Auth
+    description: 認証・ユーザー管理
+  - name: Condition
+    description: コンディション管理
+  - name: Habit
+    description: 習慣管理
+  - name: Log
+    description: 習慣チェック・履歴
+  - name: Stats
+    description: 統計機能
+paths:
+  # ユーザー認証
+  /register:
+    post:
+      summary: "ユーザー登録"
+      description: "新しいユーザーを作成し、認証情報を保存します。"
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user_register_request'
+      responses:
+        '201':
+          description: "ユーザー登録成功"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_register_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '409':
+          $ref: '#/components/responses/conflict_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+
+  /session:
+    post:
+      summary: セッション発行
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#/components/schemas/user_login_request'
+      responses:
+        '201':
+          description: "セッション付与成功"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user_login_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '404':
+          $ref: '#/components/responses/not_found_response'
+        '409':
+          $ref: '#/components/responses/conflict_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+
+    delete:
+      summary: "セッション削除（ログアウト）"
+      tags:
+        - Auth
+      responses:
+        '204':
+          description: "セッション削除成功（返却データなし）"
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+
+
+  # コンディション管理
+  /condition:
+    post:
+      summary: コンディション入力
+      tags:
+        - Condition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/condition_request'
+      responses:
+        '201':
+          description: "入力完了"
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+
+    get:
+      summary: 本日のコンディション取得
+      tags:
+        - Condition
+      responses:
+        '200':
+          description: 本日のコンディション情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/condition_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '404':
+          $ref: '#/components/responses/not_found_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+
+
+  # 習慣管理
+  /habits:
+    post:
+      summary: 習慣追加
+      tags:
+        - Habit
+      description: "新しい習慣を登録します"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/habit_request'
+      responses:
+        '201':
+          description: "習慣登録成功"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/single_habit_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '409':
+          $ref: '#/components/responses/conflict_response'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+    get:
+      summary: 習慣一覧取得
+      tags:
+        - Habit
+      responses:
+        '200':
+          description: 習慣一覧
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/all_habits_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '404':
+          $ref: '#/components/responses/not_found_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+  /habits/{id}:
+    patch:
+      summary: 習慣編集
+      tags:
+        - Habit
+      description: "指定したIDの習慣を編集します。"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/habit_request'
+      responses:
+        '200':
+          description: "習慣編集成功"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/single_habit_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '403':
+          $ref: '#/components/responses/forbidden_response'
+        '404':
+          $ref: '#/components/responses/not_found_response'
+        '409':
+          $ref: '#/components/responses/conflict_response'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+    delete:
+      summary: 習慣削除
+      tags:
+        - Habit
+      description: "指定したIDの習慣を削除します。"
+      responses:
+        '204':
+          description: "習慣削除成功（返却データなし）"
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '403':
+          $ref: '#/components/responses/forbidden_response'
+        '404':
+          $ref: '#/components/responses/not_found_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+
+
+  # 習慣調整・順序決定
+  /habits/ordered:
+    get:
+      summary: コンディションに応じた習慣順リスト取得
+      tags:
+        - Habit
+      description: "本日のコンディションに基づき、優先順に並べた習慣リストを返却します。"
+      responses:
+        '200':
+          description: "優先順習慣リスト"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ordered_habits_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+
+
+  # 習慣チェック・振り返り
+  /habits/logs:
+    post:
+      summary: 習慣の完了チェック
+      tags:
+        - Log
+      description: "指定した習慣の完了を記録します。"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/habit_log_request'
+      responses:
+        '201':
+          description: "習慣完了記録成功"
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '404':
+          $ref: '#/components/responses/not_found_response'
+        '409':
+          $ref: '#/components/responses/conflict_response'
+        '422':
+          $ref: '#/components/responses/unprocessable_entity_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+    get:
+      summary: 習慣チェック履歴取得
+      tags:
+        - Log
+      description: "ユーザーの習慣チェック履歴を取得します。"
+      responses:
+        '200':
+          description: "習慣チェック履歴一覧"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/habit_log_history_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+
+
+  # 統計機能
+  /stats:
+    get:
+      summary: 連続達成日数取得
+      tags:
+        - Stats
+      description: "ユーザーの習慣ごとの連続達成日数を取得します。"
+      responses:
+        '200':
+          description: "連続達成日数情報"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/chain_stats_response'
+        '400':
+          $ref: '#/components/responses/bad_request_response'
+        '401':
+          $ref: '#/components/responses/unauthorized_response'
+        '500':
+          $ref: '#/components/responses/internal_server_error_response'
+
+
+components:
+  schemas:
+    # --- ユーザー関連 ---
+    user_register_request:
+      type: object
+      required:
+        - user_name
+        - password
+        - password_confirm
+      properties:
+        user_name:
+          type: string
+          description: "登録するユーザー名（ユニーク）"
+          example: "Yamada_3956"
+        password:
+          type: string
+          format: password
+          description: "パスワード(8文字以上推奨)"
+          example: "Moku_0911"
+        password_confirm:
+          type: string
+          format: password
+          description: "確認用パスワード（password と同じ値）"
+          example: "Moku_0911"
+
+    # --- 習慣順リスト ---
+    ordered_habits_response:
+      type: array
+      description: "優先順に並べた習慣リスト"
+      items:
+        type: object
+        properties:
+          habit_id:
+            type: integer
+            description: "習慣ID"
+            example: 1
+          habit_name:
+            type: string
+            description: "習慣名"
+            example: "朝ランニング"
+          category:
+            type: string
+            description: "カテゴリ"
+            example: "健康"
+          target_value:
+            type: integer
+            description: "目標値"
+            example: 5
+          unit:
+            type: string
+            description: "単位"
+            example: "回"
+          p_cost:
+            type: integer
+            description: "肉体的コスト(1-10)"
+            example: 5
+          m_cost:
+            type: integer
+            description: "精神的コスト(1-10)"
+            example: 3
+          must:
+            type: boolean
+            description: "必須かどうか"
+            example: true
+
+    # --- 統計関連 ---
+    chain_stats_response:
+      type: integer
+      description: "連続達成日数"
+      example: 5
+
+    # --- 習慣ログ関連 ---
+    habit_log_request:
+      type: object
+      required:
+        - habit_id
+        - date
+      properties:
+        habit_id:
+          type: integer
+          description: "習慣のID"
+          example: 1
+        date:
+          type: string
+          format: date
+          description: "チェック日 (YYYY-MM-DD)"
+          example: "2026-03-17"
+        is_completed:
+          type: boolean
+          description: "完了したかどうか"
+          example: true
+
+    habit_log_history_response:
+      type: array
+      items:
+        type: object
+        properties:
+          habit_id:
+            type: integer
+            description: "習慣ID"
+            example: 1
+          date:
+            type: string
+            format: date
+            description: "チェック日"
+            example: "2026-03-17"
+
+    user_register_response:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          description: "自動インクリメントID"
+          example: 1
+        user_name:
+          type: string
+          example: "Moku_0911"
+
+    user_login_request:
+      type: object
+      required:
+        - user_name
+        - password
+      properties:
+        user_name:
+          type: string
+          description: "登録したユーザー名"
+          example: "Yamada_3956"
+        password:
+          type: string
+          format: password
+          description: "登録したパスワード"
+          example: "Moku_0911"
+
+    user_login_response:
+      type: object
+      properties:
+        session_id:
+          type: integer
+          description: "セッション取得"
+          example: 1
+
+    # --- コンディション関連 ---
+    condition_request:
+      type: object
+      required: 
+         - p_condition
+         - m_condition
+      properties:
+        p_condition:
+          type: integer
+          description: "肉体的コンディション"
+          example: 5
+        m_condition:
+          type: integer
+          description: "精神的コンディション"
+          example: 5
+
+    condition_response:
+      type: object
+      properties:
+        p_condition:
+          type: integer
+          enum: [1, 2, 3, 4, 5]
+          description: "肉体的コンディション(1〜5)"
+        m_condition:
+          type: integer
+          enum: [1, 2, 3, 4, 5]
+          description: "精神的コンディション(1〜5)"
+        rank:
+          type: string
+          enum: [good, normal, bad]
+          description: "ランク（好調/普通/不調）"
+        date:
+          type: string
+          format: date
+          description: "記録日"
+
+    # --- 習慣関連 ---
+    habit_request:
+      type: object
+      required:
+        - habit_name
+        - category
+        - target_value
+        - unit
+        - p_cost
+        - m_cost
+        - must
+      properties:
+        habit_name:
+          type: string
+          description: "習慣名"
+          example: "朝ランニング"
+        category:
+          type: string
+          description: "カテゴリ"
+          example: "健康"
+        target_value:
+          type: integer
+          description: "目標値"
+          example: 5
+        unit:
+          type: string
+          description: "単位"
+          example: "回"
+        p_cost:
+          type: integer
+          description: "肉体的コスト(1-10)"
+          minimum: 1
+          maximum: 10
+          example: 5
+        m_cost:
+          type: integer
+          description: "精神的コスト(1-10)"
+          minimum: 1
+          maximum: 10
+          example: 3
+        must:
+          type: boolean
+          description: "必須かどうか"
+          example: true
+
+    all_habits_response:
+      type: array
+      items:
+        type: object
+        properties:
+          habit_id:
+            type: integer
+            description: "習慣ID"
+            example: 1
+          habit_name:
+            type: string
+            example: "朝ランニング"
+          category:
+            type: string
+            example: "健康"
+          target_value:
+            type: integer
+            description: "目標値"
+            example: 5
+          unit:
+            type: string
+            description: "単位"
+            example: "回"
+          p_cost:
+            type: integer
+            example: 5
+          m_cost:
+            type: integer
+            example: 3
+          must:
+            type: boolean
+            example: true
+
+    single_habit_response:
+      type: object
+      properties:
+        habit_id:
+          type: integer
+          description: "習慣ID"
+          example: 1
+        habit_name:
+          type: string
+          example: "朝ランニング"
+        category:
+          type: string
+          example: "健康"
+        target_value:
+          type: integer
+          description: "目標値"
+          example: 5
+        unit:
+          type: string
+          description: "単位"
+          example: "回"
+        p_cost:
+          type: integer
+          example: 5
+        m_cost:
+          type: integer
+          example: 3
+        must:
+          type: boolean
+          example: true
+
+    error_response:
+      type: object
+      properties:
+        status:
+          type: integer
+          description: "HTTPステータスコード"
+          example: 400
+        error:
+          type: string
+          description: "エラー種別"
+          example: "Bad Request"
+        message:
+          type: string
+          description: "エラーメッセージ"
+          example: "リクエストが不正です。"
+        details:
+          type: array
+          description: "追加のエラー情報"
+          items:
+            type: string
+          example:
+            - "email は必須です"
+
+  responses:
+    bad_request_response:
+      description: "リクエストデータに問題あり(400)"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error_response'
+    unauthorized_response:
+      description: "認証されていません(401)"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error_response'
+    forbidden_response:
+      description: "権限がありません(403)"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error_response'
+    not_found_response:
+      description: "リソースが見つかりません(404)"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error_response'
+    conflict_response:
+      description: "リソースの競合が発生しました(409)"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error_response'
+    unprocessable_entity_response:
+      description: "バリデーションエラー(422)"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error_response'
+    internal_server_error_response:
+      description: "サーバー内部エラー(500)"
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error_response'
