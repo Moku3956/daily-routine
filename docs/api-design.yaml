@@ -95,8 +95,8 @@ paths:
         required: true
         content:
           application/json:
-          scheme:
-            $ref: '#/components/schemas/condition_request'
+            schema:
+              $ref: '#/components/schemas/condition_request'
       responses:
         '201':
           description: "入力完了"
@@ -303,7 +303,7 @@ paths:
 
 
   # 統計機能
-  /stats/chain:
+  /stats/:
     get:
       summary: 連続達成日数取得
       tags:
