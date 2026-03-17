@@ -17,6 +17,8 @@ erDiagram
         INT user_id FK "Users.user_id"
         VARCHAR habits_name
         VARCHAR category
+        INT target_value
+        VARCHAR unit
         INT p_cost "1-10"
         INT m_cost "1-10"
         BOOLEAN must
