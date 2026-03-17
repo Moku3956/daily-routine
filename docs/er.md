@@ -1,3 +1,5 @@
+# ER図
+
 ```mermaid
 erDiagram
 
@@ -13,9 +15,9 @@ erDiagram
     }
 
     HABITS {
-        INT habits_id PK "オートインクリメント"
+        INT habit_id PK "オートインクリメント"
         INT user_id FK "USERS.user_id"
-        VARCHAR habits_name
+        VARCHAR habit_name
         VARCHAR category
         INT target_value
         VARCHAR unit
@@ -34,7 +36,7 @@ erDiagram
 
     LOGS {
         INT logs_id PK "オートインクリメント"
-        INT habits_id FK "HABITS.habits_id"
+        INT habit_id FK "HABITS.habit_id"
         BOOLEAN is_completed
         DATE date
     }
