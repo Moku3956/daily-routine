@@ -16,11 +16,11 @@
 
 ```mermaid
 graph TD
-    User["ユーザー(Browser)"]
-    L["左側アダプターHTTP Handler / Auth Middleware"]
-    U["アプリケーション層UseCase"]
-    D["ドメイン層Entity / Domain Service"]
-    R["右側アダプターRepository / External API"]
+    User["ブラウザ"]
+    L["左側アダプター <br>Handler / Auth Middleware"]
+    U["アプリケーション層 <br>UseCase"]
+    D["ドメイン層 <br>Entity / Domain Service"]
+    R["右側アダプター <br>Repository"]
     DB["Database"]
 
     User-->|HTTPリクエスト|L
@@ -67,14 +67,6 @@ graph TD
 - セッションが有効な場合はユーザーIDを取得し、前日の実行ログや習慣リストを取得
 - コンディション入力後、ユースケース経由でドメインロジックを実行し、調整済み習慣リストを返却
 - 習慣チェックや振り返り、統計機能も同様にAPI経由で処理
-
----
-
-## 採用アーキテクチャ方針
-- 本システムはHexagonal Architectureを採用する。
-- 依存関係は「アダプター -> アプリケーション層 -> ドメイン層」の向きに統一する。
-- ドメイン層は実装技術に依存せず、ポート（インターフェース）を境界とする。
-- インフラ実装はアダプター層に閉じ込め、置き換え可能性を担保する。
 
 ---
 
