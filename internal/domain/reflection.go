@@ -1,1 +1,1 @@
-package adapter
+package domain
