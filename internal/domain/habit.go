@@ -2,7 +2,7 @@ package domain
 
 type Habit struct {
 	HabitId   int
-	UserId    string
+	UserId    int
 	HabitName string
 	Category  string
 	Value     int

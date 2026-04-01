@@ -10,6 +10,10 @@ type sqlHabitRepository struct {
 	db *sql.DB
 }
 
+func NewSqlHabitRepository(habitDB *sql.DB) *sqlHabitRepository {
+	return &sqlHabitRepository{db: habitDB}
+}
+
 func (r *sqlHabitRepository) Save(h *domain.Habit) error {
 	query := `
 		INSERT INTO habits
