@@ -10,6 +10,7 @@ type sqlHabitRepository struct {
 	db *sql.DB
 }
 
+// 通信が確立されたDBの器を受け取り、DBの実体を返す
 func NewSqlHabitRepository(habitDB *sql.DB) *sqlHabitRepository {
 	return &sqlHabitRepository{db: habitDB}
 }
@@ -37,4 +38,11 @@ func (r *sqlHabitRepository) Save(h *domain.Habit) error {
 		return err
 	}
 	return nil
+}
+
+func (r *sqlHabitRepository) Update(*domain.Habit) {
+	// query := `
+	// 	UPDATE habits
+	// 	SET
+	// `
 }
