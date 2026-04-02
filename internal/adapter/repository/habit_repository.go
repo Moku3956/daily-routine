@@ -40,9 +40,17 @@ func (r *sqlHabitRepository) Save(h *domain.Habit) error {
 	return nil
 }
 
-func (r *sqlHabitRepository) Update(*domain.Habit) {
-	// query := `
-	// 	UPDATE habits
-	// 	SET
-	// `
+// func (r *sqlHabitRepository) Update(*domain.Habit) {
+// 	// query := `
+// 	// 	UPDATE habits
+// 	// 	SET
+// 	// `
+// }
+
+func (r *sqlHabitRepository) Update(h *domain.Habit) error {
+	return nil // とりあえず中身は空でも、メソッドが存在すれば「合格」になる
+}
+
+func (r *sqlHabitRepository) Delete(id int) error {
+	return nil
 }

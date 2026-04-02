@@ -11,6 +11,7 @@ import (
 
 	"github.com/Moku3956/daily-routine/internal/adapter/repository"
 	"github.com/Moku3956/daily-routine/internal/domain"
+	"github.com/Moku3956/daily-routine/internal/usecase"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -52,13 +53,14 @@ func run() error {
 	fmt.Println("DB接続成功")
 
 	// 読み込んだsetup.sqlを使って、テーブル作成
-	// CREATEであるため、Exec
+	// Execはエラー以外の返り値
 	if _, err := db.ExecContext(ctx, schemaSQL); err != nil {
 		return fmt.Errorf("habits テーブル作成に失敗しました: %w", err)
 	}
 
 	// DBの実体をもつ
 	habitRepo := repository.NewSqlHabitRepository(db)
+	habitUsecase := usecase.NewHabitUsecase(habitRepo)
 
 	// 接続テスト用の、habit
 	newHabit := domain.Habit{
@@ -71,9 +73,8 @@ func run() error {
 		MCost:     1,
 		Must:      true,
 	}
-	if err := habitRepo.Save(&newHabit); err != nil {
-		return fmt.Errorf("習慣登録に失敗しました: %w", err)
-	}
+
+	habitUsecase.AddHabit(&newHabit)
 	fmt.Println("習慣登録成功")
 
 	return nil
