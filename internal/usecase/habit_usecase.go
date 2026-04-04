@@ -10,7 +10,7 @@ type HabitUsecase struct {
 	repo domain.HabitRepository
 }
 
-// APIリクエストから
+// handlerからのリクエストを受け取る
 func (u *HabitUsecase) AddHabit(h *domain.Habit) error {
 	if err := u.repo.Save(h); err != nil {
 		return fmt.Errorf("習慣登録に失敗: %w", err)

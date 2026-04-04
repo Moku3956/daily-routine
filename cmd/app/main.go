@@ -5,10 +5,12 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 	"strings"
 	"time"
 
+	"github.com/Moku3956/daily-routine/internal/adapter/handler"
 	"github.com/Moku3956/daily-routine/internal/adapter/repository"
 	"github.com/Moku3956/daily-routine/internal/domain"
 	"github.com/Moku3956/daily-routine/internal/usecase"
@@ -53,7 +55,7 @@ func run() error {
 	fmt.Println("DB接続成功")
 
 	// 読み込んだsetup.sqlを使って、テーブル作成
-	// Execはエラー以外の返り値
+	// Execはエラー以外の返り値がいらないとき
 	if _, err := db.ExecContext(ctx, schemaSQL); err != nil {
 		return fmt.Errorf("habits テーブル作成に失敗しました: %w", err)
 	}
@@ -81,6 +83,8 @@ func run() error {
 }
 
 func main() {
+	http.HandleFunc("/habit", handler.HabitHandler)
+	http.ListenAndServe(":8080", nil)
 	if err := run(); err != nil {
 		log.Fatalf("習慣の登録に失敗しました: %v", err)
 	}
