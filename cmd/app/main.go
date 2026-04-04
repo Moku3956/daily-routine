@@ -12,7 +12,6 @@ import (
 
 	"github.com/Moku3956/daily-routine/internal/adapter/handler"
 	"github.com/Moku3956/daily-routine/internal/adapter/repository"
-	"github.com/Moku3956/daily-routine/internal/domain"
 	"github.com/Moku3956/daily-routine/internal/usecase"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -32,6 +31,7 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("DB接続の初期化に失敗しました: %w", err)
 	}
+	defer db.Close()
 
 	// setup.sqlの読み込み
 	schemaBytes, err := os.ReadFile("internal/adapter/repository/setup.sql")
@@ -42,7 +42,6 @@ func run() error {
 	if schemaSQL == "" {
 		return fmt.Errorf("setup.sql が空です")
 	}
-	defer db.Close()
 
 	// Contextを使って、デバックしやすくする
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -55,37 +54,21 @@ func run() error {
 	fmt.Println("DB接続成功")
 
 	// 読み込んだsetup.sqlを使って、テーブル作成
-	// Execはエラー以外の返り値がいらないとき
 	if _, err := db.ExecContext(ctx, schemaSQL); err != nil {
 		return fmt.Errorf("habits テーブル作成に失敗しました: %w", err)
 	}
 
-	// DBの実体をもつ
 	habitRepo := repository.NewSqlHabitRepository(db)
 	habitUsecase := usecase.NewHabitUsecase(habitRepo)
+	habitHandler := handler.NewHabitHttpHandler(habitUsecase)
 
-	// 接続テスト用の、habit
-	newHabit := domain.Habit{
-		UserId:    1,
-		HabitName: "朝の散歩",
-		Category:  "健康",
-		Value:     30,
-		Unit:      "分",
-		PCost:     2,
-		MCost:     1,
-		Must:      true,
-	}
-
-	habitUsecase.AddHabit(&newHabit)
-	fmt.Println("習慣登録成功")
-
-	return nil
+	http.HandleFunc("/habit", habitHandler.Create)
+	fmt.Println("サーバー起動中 :8080")
+	return http.ListenAndServe(":8080", nil)
 }
 
 func main() {
-	http.HandleFunc("/habit", handler.HabitHandler)
-	http.ListenAndServe(":8080", nil)
 	if err := run(); err != nil {
-		log.Fatalf("習慣の登録に失敗しました: %v", err)
+		log.Fatalf("%v", err)
 	}
 }
