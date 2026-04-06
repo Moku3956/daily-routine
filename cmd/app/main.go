@@ -20,13 +20,18 @@ import (
 func run() error {
 	// .envの読み込み
 	if err := godotenv.Load(); err != nil {
-		log.Printf("warning: .envファイルを読み込めませんでした: %v", err)
+		// Docker環境では.envがないのは正常
+		// ローカル実行時のみ警告を出す
+		if os.Getenv("DATABASE_URL") == "" {
+			log.Printf("warning: .envファイルを読み込めませんでした: %v", err)
+		}
 	}
 
-	password := os.Getenv("POSTGRES_PASSWORD")
-
 	// DB接続
-	conn := fmt.Sprintf("user=postgres password=%s dbname=postgres host=127.0.0.1 port=5432 sslmode=disable", password)
+	conn := os.Getenv("DATABASE_URL")
+	if conn == "" {
+		return fmt.Errorf("DATABASE_URL環境変数が設定されていません")
+	}
 	db, err := sql.Open("postgres", conn)
 	if err != nil {
 		return fmt.Errorf("DB接続の初期化に失敗しました: %w", err)

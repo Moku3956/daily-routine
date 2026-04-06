@@ -1,0 +1,19 @@
+# 機密情報
+.env
+
+# ビルド済みバイナリ
+app
+server
+
+# Git
+.git
+.gitignore
+
+# Claude
+.claude
+
+# ドキュメント
+docs
+
+# Go テストキャッシュ
+**/*_test.go
