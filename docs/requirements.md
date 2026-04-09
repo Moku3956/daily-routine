@@ -102,4 +102,33 @@
 
 
 ## 非機能要件
-- 
+- バックエンドはGoを採用し、Hexagonal Architectureで設計する。
+- ドメイン層は `internal/domain` を中心に配置し、アダプター層との疎結合を維持する。
+- Web APIはGin、DBアクセスはGORM、データベースはPostgreSQLを採用する。
+- 依存注入は `main.go` で手動DIを行う。
+- フロントエンドはNext.js（App Router）+ TypeScriptを採用する。
+- スタイリングはTailwind CSS、UI部品はshadcn/uiを採用する。
+- 状態/通信管理はTanStack Queryを採用する。
+- PWA（next-pwa）に対応し、ブラウザからインストール可能にする。
+
+### 技術スタック一覧
+
+#### バックエンド
+| 役割 | 技術 | 備考 |
+| --- | --- | --- |
+| 言語 | Go | シンプルで高速。並行処理が得意。 |
+| 設計手法 | Hexagonal Architecture | `internal/domain` を中心とした疎結合な設計。 |
+| Webフレームワーク | Gin | 左側アダプター。高速なHTTPルーティング。 |
+| ORM | GORM | 右側アダプター。DB操作をGoの構造体で完結。 |
+| データベース | PostgreSQL | 構造化データの保存。拡張性が高い。 |
+| DI（依存注入） | 手動DI | `main.go` で各パーツを接続する。 |
+
+#### フロントエンド
+| 役割 | 技術 | 備考 |
+| --- | --- | --- |
+| フレームワーク | Next.js (App Router) | Reactベース。最新のレンダリング手法。 |
+| 言語 | TypeScript | 型安全により、API通信のバグを減らせる。 |
+| デザイン/CSS | Tailwind CSS | ユーティリティファーストで高速スタイリング。 |
+| UI部品庫 | shadcn/ui | モダンなコンポーネントを即座に導入。 |
+| 状態/通信管理 | TanStack Query | APIからのデータ取得・キャッシュ・同期を管理。 |
+| アプリ化 | PWA (next-pwa) | ブラウザから「アプリとしてインストール」可能に。 |
